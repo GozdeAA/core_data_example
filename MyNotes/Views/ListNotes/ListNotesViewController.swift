@@ -32,6 +32,7 @@ class ListNotesViewController: UIViewController {
         self.navigationController?.navigationBar.shadowImage = UIImage()
         tableView.contentInset = .init(top: 0, left: 0, bottom: 30, right: 0)
         configureSearchBar()
+        fetchNotesFromStorage()
     }
     
     private func indexForNote(id: UUID, in list: [Note]) -> IndexPath {
@@ -72,16 +73,14 @@ class ListNotesViewController: UIViewController {
     }
     
     private func fetchNotesFromStorage() {
-        // TODO Get all saved notes
-        print("Fetching all notes")
+        allNotes = CoreDataManager.shared.fetchNotes();
     }
     
     private func deleteNoteFromStorage(_ note: Note) {
-        // TODO delete the note
         print("Deleting note")
         
-        // Update the list
         deleteNote(with: note.id!)
+        CoreDataManager.shared.deleteNote(note)
     }
     
     private func searchNotesFromStorage(_ text: String) {

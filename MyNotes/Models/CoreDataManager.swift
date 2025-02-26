@@ -63,6 +63,11 @@ class CoreDataManager {
         // veya bu şekilde de yazılabilir
         // return (try? viewContext.fetch(fetchRequest)) ?? []
     }
+    
+    func deleteNote(_ note: Note) {
+        viewContext.delete(note)
+        save() 
+    }
 }
 
 extension CoreDataManager {
