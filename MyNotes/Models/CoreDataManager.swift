@@ -48,11 +48,19 @@ class CoreDataManager {
         }
     }
 
-    func fetchNotes() -> [Note] {
+    func fetchNotes(filter: String? = nil) -> [Note] {
         let fetchRequest: NSFetchRequest<Note> = Note.fetchRequest()
         // sıralanması için
         let sortDescriptor = NSSortDescriptor(key: "l  astUpdated", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
+
+        if let filter = filter {
+            // predicate ile filtre ekledik,  cd = case and diacritic insensitive
+            // @ = placeholder
+            let predicate = NSPredicate(format: "text CONTAINS[cd] %@", filter)
+            fetchRequest.predicate = predicate
+        }
+
         do {
             return try viewContext.fetch(fetchRequest)
         } catch {
@@ -63,10 +71,10 @@ class CoreDataManager {
         // veya bu şekilde de yazılabilir
         // return (try? viewContext.fetch(fetchRequest)) ?? []
     }
-    
+
     func deleteNote(_ note: Note) {
         viewContext.delete(note)
-        save() 
+        save()
     }
 }
 
